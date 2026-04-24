@@ -281,10 +281,7 @@
 // ─────────────────────────────────────────────
 const DOW = new Date().getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
 const GYM_DAY = [0, 2, 4].includes(DOW); // Sun, Tue, Thu
-const CAL_DAY = [3].includes(DOW); // Wed
-const WALK_DAY = [5].includes(DOW); // Fri
 const SAUNA_DAY = [0, 1, 3].includes(DOW); // Sun, Mon, Wed
-const SPA_SHOWER = [1, 5].includes(DOW); // Mon/Fri
 const ERRANDS = [4].includes(DOW); // Thurs 
 const SCHEDULE = [
   {
@@ -349,10 +346,8 @@ const SCHEDULE = [
   {
     id: "afternoon", time: "3:00 – 5:00", title: "movement + recovery",
     items: [
-      (GYM_DAY ? { id: "workout", label:"gym 🏋️" }),
-      (CAL_DAY ? { id: "calanetics", label:"callanetics or pilates" }),
-      (SAUNA_DAY ? { id: "sauna", label: "sauna blanket" }),
-      (WALK_DAY ? {id: "remy", label: "walk remy"}),
+      { id: "workout", label: GYM_DAY ? "gym 🏋️" : "W: Home Workout / F: Walk Remy"},
+      { id: "sauna", label: "sauna or dry brush + spa shower" }),
       { id: "shower", label: SPA_SHOWER ? "dry brush + spa shower" : "shower" },
       { id: "meditate2", label: "meditate — 15 min" },
       { id: "snack", label: "afternoon snack + 20 min sun (weather permitting)", subs: [
