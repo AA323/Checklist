@@ -349,10 +349,10 @@ const SCHEDULE = [
   {
     id: "afternoon", time: "3:00 – 5:00", title: "movement + recovery",
     items: [
-      (GYM_DAY ? [{ id: "workout", label:"gym 🏋️" }]),
-      (CAL_DAY ? [{ id: "calanetics", label:"callanetics or pilates" }]),
-      (SAUNA_DAY ? [{ id: "sauna", label: "sauna blanket" }]),
-      (WALK_DAY ? [{id: "remy", label: "walk remy"}]),
+      (GYM_DAY ? { id: "workout", label:"gym 🏋️" }),
+      (CAL_DAY ? { id: "calanetics", label:"callanetics or pilates" }),
+      (SAUNA_DAY ? { id: "sauna", label: "sauna blanket" }),
+      (WALK_DAY ? {id: "remy", label: "walk remy"}),
       { id: "shower", label: SPA_SHOWER ? "dry brush + spa shower" : "shower" },
       { id: "meditate2", label: "meditate — 15 min" },
       { id: "snack", label: "afternoon snack + 20 min sun (weather permitting)", subs: [
