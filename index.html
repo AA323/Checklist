@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>daily protocol</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0f0f0d;
+    --surface: #1a1a16;
+    --surface2: #222219;
+    --border: #2e2e26;
+    --border2: #3a3a30;
+    --text: #e8e4d8;
+    --text2: #9a9485;
+    --text3: #5a5650;
+    --accent: #8fb87a;
+    --accent2: #c4a96a;
+    --done: #3a4a35;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 80px 0;
+  }
+
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding: 20px 20px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    text-transform: lowercase;
+  }
+
+  .date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+  }
+
+  .reset-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    background: none;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+  }
+  .reset-btn:active { background: var(--surface); }
+
+  .progress-wrap {
+    height: 2px;
+    background: var(--border);
+    border-radius: 1px;
+  }
+  .progress-fill {
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .blocks { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 10px; }
+
+  .block {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .block.complete { border-color: var(--done); }
+  .block.active { border-color: var(--border2); }
+
+  .block-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    background: var(--surface);
+    user-select: none;
+  }
+  .block-header:active { background: var(--surface2); }
+
+  .block-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    min-width: 78px;
+  }
+
+  .block-title {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .block-prog {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+  }
+  .block.complete .block-prog { color: var(--accent); }
+
+  .chevron {
+    font-size: 9px;
+    color: var(--text3);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .block.open .chevron { transform: rotate(90deg); }
+
+  .block-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+  .block.open .block-body { display: block; }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .item:last-child { border-bottom: none; }
+  .item:active { background: var(--surface); }
+
+  .cb {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border2);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .item.checked .cb {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .cb-check { display: none; color: #0f0f0d; font-size: 11px; font-weight: 700; }
+  .item.checked .cb-check { display: block; }
+
+  .item-right { flex: 1; }
+
+  .item-label {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+  .item.checked .item-label { color: var(--text3); text-decoration: line-through; text-decoration-color: var(--text3); }
+
+  .item-note {
+    font-size: 11px;
+    color: var(--text3);
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  .sub-toggle-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    background: none;
+    border: none;
+    padding: 3px 0 0;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    display: block;
+  }
+
+  .subitems {
+    display: none;
+    padding: 4px 0 8px 46px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .subitems.open { display: block; }
+
+  .subitem {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 16px 7px 0;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border));
+  }
+  .subitem:last-child { border-bottom: none; }
+  .subitem:active { opacity: 0.7; }
+
+  .sub-cb {
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .subitem.checked .sub-cb { background: var(--accent); border-color: var(--accent); }
+  .sub-check { display: none; color: #0f0f0d; font-size: 8px; font-weight: 700; }
+  .subitem.checked .sub-check { display: block; }
+
+  .subitem-label {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.45;
+  }
+  .subitem.checked .subitem-label { color: var(--text3); text-decoration: line-through; text-decoration-color: var(--text3); }
+</style>
+</head>
+<body>
+
+<div class="sticky-header">
+  <div class="top-row">
+    <h1>daily protocol</h1>
+    <button class="reset-btn" onclick="resetAll()">reset day</button>
+  </div>
+  <div class="date" id="dateStr"></div>
+  <div style="height:10px"></div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0% complete</div>
+</div>
+
+<div class="blocks" id="blocks"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// EDIT YOUR SCHEDULE HERE
+// Each block has: id, time, title, items[]
+// Each item has: id, label, note (optional), subs[] (optional)
+// ─────────────────────────────────────────────
+const SCHEDULE = [
+  {
+    id: "morning", time: "5:30 – 7:00", title: "morning launch",
+    items: [
+      { id: "wake", label: "wake up" },
+      { id: "coffee", label: "make coffee" },
+      { id: "sprouts", label: "rinse sprouts + check ferments" },
+      { id: "activate", label: "activating activity", note: "language learning, news scraper, etc. — productive but with a hard stop" },
+      { id: "meditate1", label: "meditate — 15 min" },
+      { id: "breakfast", label: "eat breakfast", subs: [
+        "1 egg + 2 yolks",
+        "avoBerry smoothie:",
+        "  → ½c frozen mixed berries (1:1:1 raspberries / strawberries / blueberries)",
+        "  → 1 avocado",
+        "  → 1t ceylon cinnamon",
+        "  → 1t elderberry juice + 1t aronia berry concentrate",
+        "  → 1–2T chia seeds",
+        "  → 4oz milk kefir",
+        "  → vanilla or almond extract (optional)",
+        "  → monkfruit sweetener liquid (optional)"
+      ]}
+    ]
+  },
+  {
+    id: "work1", time: "7:00 – 10:00", title: "work block 1",
+    items: [
+      { id: "matcha", label: "mid-morning drink: matcha / rooibos / herbal iced tea" },
+      { id: "work1do", label: "focused work — 3 hours" }
+    ]
+  },
+  {
+    id: "freelunch", time: "10:00 – 1:00", title: "free block + lunch",
+    items: [
+      { id: "free1", label: "free block — open time" },
+      { id: "lunch", label: "eat lunch", subs: [
+        "cup of chicken paw bone broth",
+        "salad base:",
+        "  → 40g broccoli sprouts",
+        "  → 10g radish sprouts",
+        "  → 5g fenugreek sprouts",
+        "  → 1c tossed salad mix",
+        "  → 1c watercress",
+        "  → 1T sprouted sunflower seeds + 1T sprouted pumpkin seeds",
+        "  → ¼c colored peppers",
+        "  → ½T dried parsley (or 1oz fresh)",
+        "  → ½t Maine Coast Sea Veg Triple Blend Flakes",
+        "  → roasted or seared vitamin-D mushrooms",
+        "dressing: avocado green goddess (avo oil mayo, kefir or tahini, garlic chive, leek, scallion microgreens, ⅛t ground mustard seed)",
+        "dehydrated chickpea + black soybean + red lentil natto crunch (2:1 L. plantarum : B. subtilis)",
+        "sardines (or bioreactor EPA/DHA/astaxanthin)"
+      ]}
+    ]
+  },
+  {
+    id: "work2", time: "1:00 – 3:00", title: "work block 2  (or errands)",
+    items: [
+      { id: "work2do", label: "focused work — or errands day" }
+    ]
+  },
+  {
+    id: "afternoon", time: "3:00 – 5:00", title: "movement + recovery",
+    items: [
+      { id: "workout", label: "workout / gym" },
+      { id: "sauna", label: "3-4 days/week: sauna" },
+      { id: "shower", label: "shower (2 days/week spa shower)" },
+      { id: "meditate2", label: "meditate — 15 min" },
+      { id: "snack", label: "afternoon snack + 20 min sun (weather permitting)", subs: [
+        "trail mix:",
+        "  → 1T sprouted sunflower seeds + 1T sprouted pumpkin seeds",
+        "  → 1T dried unsweetened cranberries or goji berries (cost permitting)",
+        "  → ½–1T cacao nibs",
+        "drink (pick one):",
+        "  → honey green tea jun kombucha",
+        "  → hibiscus ginger turmeric black pepper cinnamon cold brew (16oz)",
+        "  → iced tea"
+      ]}
+    ]
+  },
+  {
+    id: "dinner", time: "5:00 – 7:00", title: "chores + dinner",
+    items: [
+      { id: "chores", label: "chores + meal prep" },
+      { id: "dinnermeal", label: "dinner with family", subs: [
+        "chicken paw bone broth + 2t red miso (stir in before serving) + ½t sea veg triple blend",
+        "90g fresh spinach sautéed w/ EVOO + garlic chive, leek, scallion microgreens, mushrooms",
+        "2–4T raw sauerkraut",
+        "salad: sprouts, greens, watercress, ½T dried parsley, olives (kalamata, castelvetrano), tomatoes, natto crunch, avocado green goddess dressing",
+        "protein + fat focus from whatever family is eating",
+        "weekly: liver mix meatballs (avg 2oz organic grass-fed beef liver/week)"
+      ]}
+    ]
+  },
+  {
+    id: "freeeve", time: "7:00 – 9:00", title: "free block",
+    items: [
+      { id: "free2", label: "open time" },
+      { id: "eveningsnack", label: "evening snack — only if hungry", subs: [
+        "salty: pork rinds (Old Dutch / 4505 / Epic — no additives) or nuts",
+        "coconut milk egg custard (cinnamon, cacao, ginger/turmeric, matcha)",
+        "if carbs allow: homemade jello snacks, gelatin tartlets, or raw kefir gelly pie (coconut cream + allulose)"
+      ]},
+    ]
+  },
+  {
+    id: "winddown", time: "9:00 – 10:30", title: "wind down",
+    items: [
+      { id: "kitchen", label: "check kitchen projects (ferments, sprouts, cultures)" },
+      { id: "skincare", label: "skincare routine", subs: [
+        // ADD YOUR SKINCARE STEPS HERE, e.g.:
+        { id: "cleanse", label: "muji cleansing milk" },
+        { id: "mask", label: "two days/week: hibiscus honey exfoliating mask" },
+        { id: "redlight", label: "jojoba oil + red light" },
+        { id: "moisturize", label: "moisturizer" }
+      ]},
+      { id: "getready", label: "get ready for bed" },
+      { id: "sleep", label: "lights out by 10:30" }
+    ]
+  }
+];
+// ─────────────────────────────────────────────
+// NO NEED TO EDIT BELOW THIS LINE
+// ─────────────────────────────────────────────
+
+const state = {};
+
+function storageKey(id) { return 'dp2_' + id; }
+
+function loadState() {
+  const today = new Date().toDateString();
+  const savedDay = localStorage.getItem('dp2_day');
+  if (savedDay !== today) {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('dp2_'));
+    keys.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem('dp2_day', today);
+  }
+  SCHEDULE.forEach(block => {
+    block.items.forEach(item => {
+      state[item.id] = localStorage.getItem(storageKey(item.id)) === '1';
+      if (item.subs) {
+        item.subs.forEach((_, i) => {
+          const sk = item.id + '_s' + i;
+          state[sk] = localStorage.getItem(storageKey(sk)) === '1';
+        });
+      }
+    });
+  });
+}
+
+function saveState(id, val) {
+  state[id] = val;
+  localStorage.setItem(storageKey(id), val ? '1' : '0');
+}
+
+function resetAll() {
+  if (!confirm('Reset today\'s checklist?')) return;
+  Object.keys(state).forEach(k => {
+    state[k] = false;
+    localStorage.removeItem(storageKey(k));
+  });
+  renderAll();
+}
+
+function totalItems() {
+  let t = 0;
+  SCHEDULE.forEach(b => b.items.forEach(i => {
+    t++;
+    if (i.subs) t += i.subs.length;
+  }));
+  return t;
+}
+
+function checkedCount() {
+  return Object.values(state).filter(Boolean).length;
+}
+
+function getBlockProgress(block) {
+  let total = 0, done = 0;
+  block.items.forEach(item => {
+    total++; if (state[item.id]) done++;
+    if (item.subs) item.subs.forEach((_, i) => { total++; if (state[item.id + '_s' + i]) done++; });
+  });
+  return { total, done };
+}
+
+function updateProgress() {
+  const pct = Math.round(checkedCount() / totalItems() * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '% complete';
+
+  SCHEDULE.forEach(block => {
+    const { total, done } = getBlockProgress(block);
+    const el = document.getElementById('block_' + block.id);
+    const progEl = document.getElementById('prog_' + block.id);
+    if (progEl) progEl.textContent = done + '/' + total;
+    if (el) {
+      el.classList.toggle('complete', done === total && total > 0);
+    }
+  });
+}
+
+function toggleBlock(id) {
+  const el = document.getElementById('block_' + id);
+  el.classList.toggle('open');
+}
+
+function toggleSubs(itemId, e) {
+  if (e) e.stopPropagation();
+  const el = document.getElementById('subs_' + itemId);
+  const btn = document.getElementById('subtoggle_' + itemId);
+  const open = el.classList.toggle('open');
+  btn.textContent = open ? '▴ hide' : '▾ show ingredients';
+}
+
+function toggleItem(itemId) {
+  saveState(itemId, !state[itemId]);
+  const row = document.getElementById('row_' + itemId);
+  const cb = document.getElementById('cb_' + itemId);
+  row.classList.toggle('checked', state[itemId]);
+  updateProgress();
+}
+
+function toggleSub(itemId, i, e) {
+  if (e) e.stopPropagation();
+  const sk = itemId + '_s' + i;
+  saveState(sk, !state[sk]);
+  const row = document.getElementById('sub_' + itemId + '_' + i);
+  row.classList.toggle('checked', state[sk]);
+  updateProgress();
+}
+
+function getCurrentBlockId() {
+  const h = new Date().getHours() + new Date().getMinutes() / 60;
+  if (h < 7) return 'morning';
+  if (h < 10) return 'work1';
+  if (h < 13) return 'freelunch';
+  if (h < 15) return 'work2';
+  if (h < 17) return 'afternoon';
+  if (h < 19) return 'dinner';
+  if (h < 21) return 'freeeve';
+  return 'winddown';
+}
+
+function renderAll() {
+  const container = document.getElementById('blocks');
+  container.innerHTML = '';
+  const currentId = getCurrentBlockId();
+
+  SCHEDULE.forEach(block => {
+    const { total, done } = getBlockProgress(block);
+    const isOpen = block.id === currentId;
+    const isComplete = done === total && total > 0;
+
+    const blockEl = document.createElement('div');
+    blockEl.className = 'block' + (isOpen ? ' open' : '') + (isComplete ? ' complete' : '') + (block.id === currentId ? ' active' : '');
+    blockEl.id = 'block_' + block.id;
+
+    let itemsHtml = block.items.map(item => {
+      const checked = state[item.id];
+      let subsHtml = '';
+      if (item.subs && item.subs.length) {
+        const subRows = item.subs.map((s, i) => {
+          const sc = state[item.id + '_s' + i];
+          return `<div class="subitem ${sc ? 'checked' : ''}" id="sub_${item.id}_${i}" onclick="toggleSub('${item.id}', ${i}, event)">
+            <div class="sub-cb"><span class="sub-check">✓</span></div>
+            <span class="subitem-label">${s}</span>
+          </div>`;
+        }).join('');
+        subsHtml = `<div class="subitems" id="subs_${item.id}">${subRows}</div>`;
+      }
+
+      return `<div class="item ${checked ? 'checked' : ''}" id="row_${item.id}" onclick="toggleItem('${item.id}')">
+        <div class="cb" id="cb_${item.id}"><span class="cb-check">✓</span></div>
+        <div class="item-right">
+          <div class="item-label">${item.label}</div>
+          ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+          ${item.subs && item.subs.length ? `<button class="sub-toggle-btn" id="subtoggle_${item.id}" onclick="toggleSubs('${item.id}', event)">▾ show ingredients</button>` : ''}
+        </div>
+      </div>
+      ${subsHtml}`;
+    }).join('');
+
+    blockEl.innerHTML = `
+      <div class="block-header" onclick="toggleBlock('${block.id}')">
+        <span class="block-time">${block.time}</span>
+        <span class="block-title">${block.title}</span>
+        <span class="block-prog" id="prog_${block.id}">${done}/${total}</span>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="block-body">${itemsHtml}</div>`;
+
+    container.appendChild(blockEl);
+  });
+
+  updateProgress();
+}
+
+// Init
+const now = new Date();
+document.getElementById('dateStr').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+loadState();
+renderAll();
+</script>
+</body>
+</html>
