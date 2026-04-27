@@ -184,7 +184,7 @@ const other = l => ({ type:'other', label:l });
 // ═══════════════════════════════════════════════════════════════════
 const SCHEDULE = [
   {
-    id:"morning", time:"5:30 – 7:00", title:"morning launch",
+    id:"morning", time:"5:315 – 7:00", title:"morning launch",
     ambiance:[
       music("enjoy the natural sounds of the morning"),
       scent("coffee"),
@@ -213,7 +213,7 @@ const SCHEDULE = [
   {
     id:"work1", time:"7:00 – 10:00", title:"main work block",
     ambiance:[
-      music("Sitcoms or LoFi"),
+      music("sitcoms or lofi"),
       light("full brightness, daylight"),
       other("cinnamon gum")
     ],
@@ -268,6 +268,7 @@ const SCHEDULE = [
     ambiance:[
       music(GYM ? "gym beats" : SPADAY ? "spa sounds" : "positively relax + inspire"),
       scent("lemon grass + bergamot/orange"),
+      light("bright light"),
       other("bubble mint gum")
     ],
     items:[
@@ -292,7 +293,7 @@ const SCHEDULE = [
     ambiance:[
       music("drink me + reflectionsOfATinyDino"),
       scent("candle"),
-      light("warm, start dimming gradually")
+      light("warm light")
     ],
     items:[
       { id:"chores",     label:"chores + meal prep" },
@@ -311,7 +312,7 @@ const SCHEDULE = [
     ambiance:[
       music("positively relaxing + inspiring"),
       scent("incense (when allowed); smudge + agua florida"),
-      light("dim warm light, begin winding down"),
+      light("warm, dimming light"),
       other("citrus/tropical hard candy")
     ],
     items:[
@@ -351,9 +352,9 @@ const SCHEDULE = [
 // Edit the start/end times if you shift blocks around.
 // ═══════════════════════════════════════════════════════════════════
 const TASK_TIMELINE = [
-  ["morning",   5.5,   5.75,  "coffee",      "make coffee + stretch"],
-  ["morning",   5.75,  6.0,   "meditate1",   "meditate while coffee cools"],
-  ["morning",   6.0,   6.5,   "activate",    "morning pages / journaling"],
+  ["morning",   5.25,   5.50,  "coffee",      "make coffee + stretch"],
+  ["morning",   5.50,  5.75,   "meditate1",   "meditate while coffee cools"],
+  ["morning",   5.75,   6.5,   "activate",    "morning pages / journaling"],
   ["morning",   6.5,   6.75,  "sprouts",     "rinse sprouts + check ferments"],
   ["morning",   6.75,  7.0,   "breakfast",   "eat breakfast"],
   ["work1",     7.0,   7.25,  "matcha",      "make mid-morning drink"],
