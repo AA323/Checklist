@@ -20,7 +20,9 @@
     --text3: #5a5650;
     --accent: #8fb87a;
     --accent2: #c4a96a;
+    --accent3: #7a9eb8;
     --done: #3a4a35;
+    --current: #2a2a1e;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -34,227 +36,100 @@
   }
 
   .sticky-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
     background: var(--bg);
     padding: 20px 20px 12px;
     border-bottom: 1px solid var(--border);
   }
-
-  .top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-  }
-
-  h1 {
-    font-family: 'DM Mono', monospace;
-    font-size: 15px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    color: var(--text);
-    text-transform: lowercase;
-  }
-
-  .date {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text3);
-    letter-spacing: 0.08em;
-  }
-
-  .reset-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text3);
-    background: none;
-    border: 1px solid var(--border2);
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    letter-spacing: 0.06em;
-  }
+  .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  h1 { font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 400; letter-spacing: 0.12em; color: var(--text); text-transform: lowercase; }
+  .date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 10px; }
+  .reset-btn { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); background: none; border: 1px solid var(--border2); border-radius: 4px; padding: 5px 10px; cursor: pointer; letter-spacing: 0.06em; }
   .reset-btn:active { background: var(--surface); }
+  .progress-wrap { height: 2px; background: var(--border); border-radius: 1px; }
+  .progress-fill { height: 2px; background: var(--accent); border-radius: 1px; transition: width 0.4s ease; }
+  .progress-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); margin-top: 6px; letter-spacing: 0.05em; }
 
-  .progress-wrap {
-    height: 2px;
-    background: var(--border);
-    border-radius: 1px;
+  /* NOW BANNER */
+  .now-banner {
+    margin: 12px 16px 0;
+    padding: 10px 14px;
+    background: var(--current);
+    border: 1px solid var(--accent2);
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .progress-fill {
-    height: 2px;
-    background: var(--accent);
-    border-radius: 1px;
-    transition: width 0.4s ease;
-  }
+  .now-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .now-text { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent2); letter-spacing: 0.05em; line-height: 1.4; }
 
-  .progress-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text3);
-    margin-top: 6px;
-    letter-spacing: 0.05em;
-  }
-
-  .blocks { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 10px; }
-
-  .block {
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    transition: border-color 0.3s;
-  }
+  /* BLOCKS */
+  .blocks { padding: 12px 16px 0; display: flex; flex-direction: column; gap: 10px; }
+  .block { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color 0.3s; }
   .block.complete { border-color: var(--done); }
-  .block.active { border-color: var(--border2); }
+  .block.is-current { border-color: var(--border2); }
 
-  .block-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 13px 16px;
-    cursor: pointer;
-    background: var(--surface);
-    user-select: none;
-  }
+  .block-header { display: flex; align-items: flex-start; gap: 10px; padding: 13px 16px; cursor: pointer; background: var(--surface); user-select: none; }
   .block-header:active { background: var(--surface2); }
 
-  .block-time {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text3);
-    letter-spacing: 0.06em;
-    min-width: 78px;
-  }
+  .block-header-left { display: flex; flex-direction: column; gap: 2px; min-width: 78px; padding-top: 1px; }
+  .block-time { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); letter-spacing: 0.06em; }
 
-  .block-title {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text);
-    flex: 1;
-  }
+  .block-header-center { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .block-title { font-size: 14px; font-weight: 400; color: var(--text); }
 
-  .block-prog {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text3);
+  .block-ambiance { display: flex; flex-wrap: wrap; gap: 4px; }
+  .amb-tag {
+    font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.04em;
+    padding: 2px 7px; border-radius: 20px; white-space: nowrap;
   }
+  .amb-tag.music { background: #1a1f2e; color: var(--accent3); border: 1px solid #2a3550; }
+  .amb-tag.scent { background: #1f1a2e; color: #b87ab8; border: 1px solid #3a2a50; }
+  .amb-tag.light { background: #2e2a1a; color: var(--accent2); border: 1px solid #504020; }
+  .amb-tag.other { background: #1a2e1e; color: var(--accent); border: 1px solid #2a5035; }
+
+  .block-header-right { display: flex; align-items: flex-start; gap: 8px; padding-top: 1px; }
+  .block-prog { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); }
   .block.complete .block-prog { color: var(--accent); }
-
-  .chevron {
-    font-size: 9px;
-    color: var(--text3);
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
+  .chevron { font-size: 9px; color: var(--text3); transition: transform 0.2s; flex-shrink: 0; padding-top: 2px; }
   .block.open .chevron { transform: rotate(90deg); }
 
-  .block-body {
-    display: none;
-    border-top: 1px solid var(--border);
-  }
+  .block-body { display: none; border-top: 1px solid var(--border); }
   .block.open .block-body { display: block; }
 
-  .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 11px 16px;
-    cursor: pointer;
-    border-bottom: 1px solid var(--border);
-  }
+  /* ITEMS */
+  .item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 16px; cursor: pointer; border-bottom: 1px solid var(--border); position: relative; }
   .item:last-child { border-bottom: none; }
   .item:active { background: var(--surface); }
+  .item.is-now { background: var(--current); }
+  .item.is-now::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent2); border-radius: 0 1px 1px 0; }
 
-  .cb {
-    width: 18px;
-    height: 18px;
-    border: 1.5px solid var(--border2);
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-  }
-  .item.checked .cb {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
+  .cb { width: 18px; height: 18px; border: 1.5px solid var(--border2); border-radius: 4px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .item.checked .cb { background: var(--accent); border-color: var(--accent); }
   .cb-check { display: none; color: #0f0f0d; font-size: 11px; font-weight: 700; }
   .item.checked .cb-check { display: block; }
 
   .item-right { flex: 1; }
-
-  .item-label {
-    font-size: 14px;
-    color: var(--text);
-    line-height: 1.4;
-    transition: color 0.2s;
-  }
+  .item-label { font-size: 14px; color: var(--text); line-height: 1.4; }
   .item.checked .item-label { color: var(--text3); text-decoration: line-through; text-decoration-color: var(--text3); }
+  .item-note { font-size: 11px; color: var(--text3); font-style: italic; margin-top: 3px; }
 
-  .item-note {
-    font-size: 11px;
-    color: var(--text3);
-    font-style: italic;
-    margin-top: 3px;
-  }
+  .day-badge { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--accent3); background: #1a1f2e; border: 1px solid #2a3550; border-radius: 20px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; white-space: nowrap; }
 
-  .sub-toggle-btn {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--accent2);
-    background: none;
-    border: none;
-    padding: 3px 0 0;
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    display: block;
-  }
+  .sub-toggle-btn { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent2); background: none; border: none; padding: 3px 0 0; cursor: pointer; letter-spacing: 0.04em; display: block; }
 
-  .subitems {
-    display: none;
-    padding: 4px 0 8px 46px;
-    border-top: 1px solid var(--border);
-    background: var(--bg);
-  }
+  .subitems { display: none; padding: 4px 0 8px 46px; border-top: 1px solid var(--border); background: var(--bg); }
   .subitems.open { display: block; }
 
-  .subitem {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 7px 16px 7px 0;
-    cursor: pointer;
-    border-bottom: 1px solid var(--border));
-  }
-  .subitem:last-child { border-bottom: none; }
+  .subitem { display: flex; align-items: flex-start; gap: 10px; padding: 7px 16px 7px 0; cursor: pointer; }
   .subitem:active { opacity: 0.7; }
 
-  .sub-cb {
-    width: 14px;
-    height: 14px;
-    border: 1px solid var(--border2);
-    border-radius: 3px;
-    flex-shrink: 0;
-    margin-top: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-  }
+  .sub-cb { width: 14px; height: 14px; border: 1px solid var(--border2); border-radius: 3px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
   .subitem.checked .sub-cb { background: var(--accent); border-color: var(--accent); }
   .sub-check { display: none; color: #0f0f0d; font-size: 8px; font-weight: 700; }
   .subitem.checked .sub-check { display: block; }
 
-  .subitem-label {
-    font-size: 12.5px;
-    color: var(--text2);
-    line-height: 1.45;
-  }
+  .subitem-label { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
   .subitem.checked .subitem-label { color: var(--text3); text-decoration: line-through; text-decoration-color: var(--text3); }
 </style>
 </head>
@@ -266,29 +141,62 @@
     <button class="reset-btn" onclick="resetAll()">reset day</button>
   </div>
   <div class="date" id="dateStr"></div>
-  <div style="height:10px"></div>
   <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
   <div class="progress-label" id="progressLabel">0% complete</div>
 </div>
 
+<div id="nowBannerWrap"></div>
 <div class="blocks" id="blocks"></div>
 
 <script>
-// ─────────────────────────────────────────────
-// EDIT YOUR SCHEDULE HERE
-// Each block has: id, time, title, items[]
-// Each item has: id, label, note (optional), subs[] (optional)
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// DAY FLAGS  —  edit these to match your schedule
+// 0=Sun  1=Mon  2=Tue  3=Wed  4=Thu  5=Fri  6=Sat
+// ═══════════════════════════════════════════════════════════════════
+const DOW     = new Date().getDay();
+const GYM     = [0, 2, 4].includes(DOW);   // Sun · Tue · Thu
+const CAL     = DOW === 3;                  // Wednesday Calanetics/Pilates
+const ERRANDS = DOW === 4;                  // Thursday
+const FRI     = DOW === 5;                  // Friday
+const SPADAY  = [1, 5].includes(DOW);       // Mon/Fri Spa Shower
+const MASK    = [0, 4].includes(DOW);       // Sun · Thurs hibiscus mask
+
+// ═══════════════════════════════════════════════════════════════════
+// AMBIANCE HELPERS  —  type must be: music | scent | light | other
+// ═══════════════════════════════════════════════════════════════════
+const music = l => ({ type:'music', label:l });
+const scent = l => ({ type:'scent', label:l });
+const light = l => ({ type:'light', label:l });
+const other = l => ({ type:'other', label:l });
+
+// ═══════════════════════════════════════════════════════════════════
+// SCHEDULE
+//
+// Block fields:  id · time · title · ambiance[] · items[]
+//
+// Item fields:
+//   id       unique string, no spaces
+//   label    display text
+//   note     small italic line beneath label  (optional)
+//   days     array of DOW ints item appears on, e.g. [2,4,0]
+//            omit to show every day
+//   subs     array of ingredient/step strings  (optional)
+// ═══════════════════════════════════════════════════════════════════
 const SCHEDULE = [
   {
-    id: "morning", time: "5:30 – 7:00", title: "morning launch",
-    items: [
-      { id: "wake", label: "wake up" },
-      { id: "coffee", label: "make coffee" },
-      { id: "sprouts", label: "rinse sprouts + check ferments" },
-      { id: "activate", label: "activating activity", note: "language learning, news scraper, etc. — productive but with a hard stop" },
-      { id: "meditate1", label: "meditate — 15 min" },
-      { id: "breakfast", label: "eat breakfast", subs: [
+    id:"morning", time:"5:30 – 7:00", title:"morning launch",
+    ambiance:[
+      music("enjoy the natural sounds of the morning"),
+      scent("coffee"),
+      light("warm lamp only, no overhead")
+    ],
+    items:[
+      { id:"coffee",    label:"make coffee + stretch" },
+      { id:"meditate1", label:"pour coffee + meditate 15 min while it cools" },
+      { id:"activate",  label:"activating activity: dream journal / morning pages",
+        note:"future: language learning, news scraper — productive but hard stop" },
+      { id:"sprouts",   label:"rinse sprouts + check ferments" },
+      { id:"breakfast", label:"eat breakfast", subs:[
         "1 egg + 2 yolks",
         "avoBerry smoothie:",
         "  → ½c frozen mixed berries (1:1:1 raspberries / strawberries / blueberries)",
@@ -303,17 +211,29 @@ const SCHEDULE = [
     ]
   },
   {
-    id: "work1", time: "7:00 – 10:00", title: "work block 1",
-    items: [
-      { id: "matcha", label: "mid-morning drink: matcha / rooibos / herbal iced tea" },
-      { id: "work1do", label: "focused work — 3 hours" }
+    id:"work1", time:"7:00 – 10:00", title:"main work block",
+    ambiance:[
+      music("Sitcoms or LoFi"),
+      light("full brightness, daylight"),
+      other("cinnamon gum")
+    ],
+    items:[
+      { id:"matcha",  label:"mid-morning drink: matcha / rooibos / herbal iced tea" },
+      { id:"work1do", label:"focused work — 3 hours" }
     ]
   },
   {
-    id: "freelunch", time: "10:00 – 1:00", title: "free block + lunch",
-    items: [
-      { id: "free1", label: "free block — open time" },
-      { id: "lunch", label: "eat lunch", subs: [
+    id:"freelunch", time:"10:00 – 1:00", title:"productive indulgence",
+    ambiance:[
+      music("pop punk + protest rock // album apreciation"),
+      scent("incense (when allowed)"),
+      light("natural light when possible"),
+      other("citrus/tropical hard candy")
+    ],
+    items:[
+      { id:"admin",    label:"15–30 min admin: emails, bills, quick wins", note:"time-boxed" },
+      { id:"creative", label:"2 hr creative work // Common Culture" },
+      { id:"lunch",    label:"30–45 min: eat lunch + read fiction", subs:[
         "cup of chicken paw bone broth",
         "salad base:",
         "  → 40g broccoli sprouts",
@@ -333,19 +253,29 @@ const SCHEDULE = [
     ]
   },
   {
-    id: "work2", time: "1:00 – 3:00", title: "work block 2  (or errands)",
-    items: [
-      { id: "work2do", label: "focused work — or errands day" }
+    id:"work2", time:"1:00 – 3:00", title: ERRANDS ? "errands (thursday)" : "supplement work block",
+    ambiance:[
+      music(ERRANDS ? "podcast" : "jungle slang instrumental"),
+      light("full brightness"),
+      other(ERRANDS ? "citrus/tropical hard candy" : "cinnamon gum")
+    ],
+    items:[
+      { id:"work2do", label: ERRANDS ? "run errands" : "focused work — 2 hours" }
     ]
   },
   {
-    id: "afternoon", time: "3:00 – 5:00", title: "movement + recovery",
-    items: [
-      { id: "workout", label: "workout / gym" },
-      { id: "sauna", label: "sauna" },
-      { id: "shower", label: "shower" },
-      { id: "meditate2", label: "meditate — 15 min" },
-      { id: "snack", label: "afternoon snack + 20 min sun (weather permitting)", subs: [
+    id:"afternoon", time:"3:00 – 5:00", title:"movement + recovery",
+    ambiance:[
+      music(GYM ? "gym beats" : SPADAY ? "spa sounds" : "positively relax + inspire"),
+      scent("lemon grass + bergamot/orange"),
+      other("bubble mint gum")
+    ],
+    items:[
+      { id:"workout",   label: GYM ? "go to the gym 🏋️" : CAL ? "calanetics/pilates" : FRI ? "walk remy" : "active rest" },
+      { id:"sauna",     label:"sauna", days:[0, 1, 3] },   
+      { id:"shower",    label: SPADAY ? "dry brush + spa shower" : "shower" },
+      { id:"meditate2", label:"meditate 15 m" },
+      { id:"snack",     label:"afternoon snack + 20 min sun (weather permitting)", subs:[
         "trail mix:",
         "  → 1T sprouted sunflower seeds + 1T sprouted pumpkin seeds",
         "  → 1T dried unsweetened cranberries or goji berries (cost permitting)",
@@ -358,71 +288,119 @@ const SCHEDULE = [
     ]
   },
   {
-    id: "dinner", time: "5:00 – 7:00", title: "chores + dinner",
-    items: [
-      { id: "chores", label: "chores + meal prep" },
-      { id: "dinnermeal", label: "dinner with family", subs: [
+    id:"dinner", time:"5:00 – 7:00", title:"chores + dinner",
+    ambiance:[
+      music("drink me + reflectionsOfATinyDino"),
+      scent("candle"),
+      light("warm, start dimming gradually")
+    ],
+    items:[
+      { id:"chores",     label:"chores + meal prep" },
+      { id:"dinnermeal", label:"dinner with family", subs:[
         "chicken paw bone broth + 2t red miso (stir in before serving) + ½t sea veg triple blend",
         "90g fresh spinach sautéed w/ EVOO + garlic chive, leek, scallion microgreens, mushrooms",
         "2–4T raw sauerkraut",
         "salad: sprouts, greens, watercress, ½T dried parsley, olives (kalamata, castelvetrano), tomatoes, natto crunch, avocado green goddess dressing",
         "protein + fat focus from whatever family is eating",
-        "weekly: liver mix meatballs (avg 2oz organic grass-fed beef liver/week)"
+        "weekly (sunday): liver mix meatballs (avg 2oz organic grass-fed beef liver/week)"
       ]}
     ]
   },
   {
-    id: "freeeve", time: "7:00 – 9:00", title: "free block",
-    items: [
-      { id: "free2", label: "open time" },
-      { id: "eveningsnack", label: "evening snack — only if hungry", subs: [
+    id:"freeeve", time:"7:00 – 9:00", title:"free block",
+    ambiance:[
+      music("positively relaxing + inspiring"),
+      scent("incense (when allowed); smudge + agua florida"),
+      light("dim warm light, begin winding down"),
+      other("citrus/tropical hard candy")
+    ],
+    items:[
+      { id:"free2",        label:"open time" },
+      { id:"eveningsnack", label:"evening snack — when hungry", subs:[
         "salty: pork rinds (Old Dutch / 4505 / Epic — no additives) or nuts",
         "coconut milk egg custard (cinnamon, cacao, ginger/turmeric, matcha)",
         "if carbs allow: homemade jello snacks, gelatin tartlets, or raw kefir gelly pie (coconut cream + allulose)"
-      ]},
+      ]}
     ]
   },
   {
-    id: "winddown", time: "9:00 – 10:30", title: "wind down",
-    items: [
-      { id: "kitchen", label: "check kitchen projects (ferments, sprouts, cultures)" },
-      { id: "skincare", label: "skincare routine", subs: [
-        // ADD YOUR SKINCARE STEPS HERE, e.g.:
-        { id: "cleanse", label: "muji cleansing milk" },
-        { id: "mask", label: "two days/week: hibiscus honey exfoliating mask" },
-        { id: "redlight", label: "jojoba oil + red light" },
-        { id: "moisturize", label: "moisturizer" }
+    id:"winddown", time:"9:00 – 10:30", title:"wind down",
+    ambiance:[
+      music("quiet + calm"),
+      scent("lavendar, mint, eucalptus (as necessary)"),
+      light("candlelight or red light only")
+    ],
+    items:[
+      { id:"kitchen",  label:"check kitchen projects (ferments, sprouts, cultures)" },
+      { id:"skincare", label:"skincare routine", subs:[
+        "muji cleansing milk",
+        ...(MASK ? ["hibiscus honey exfoliating mask  ✓ mask day"] : []),
+        "jojoba oil + red light",
+        "moisturizer"
       ]},
-      { id: "getready", label: "get ready for bed" },
-      { id: "sleep", label: "lights out by 10:30" }
+      { id:"getready", label:"nightly evaluation" },
+      { id:"sleep",    label:"lights out by 10:30" }
     ]
   }
 ];
-// ─────────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════════════
+// TASK TIMELINE  —  maps clock hours to item ids for the pointer
+// Format: [ blockId, startHour, endHour, itemId, displayLabel ]
+// Hours are decimal: 13.5 = 1:30 PM
+// Edit the start/end times if you shift blocks around.
+// ═══════════════════════════════════════════════════════════════════
+const TASK_TIMELINE = [
+  ["morning",   5.5,   5.75,  "coffee",      "make coffee + stretch"],
+  ["morning",   5.75,  6.0,   "meditate1",   "meditate while coffee cools"],
+  ["morning",   6.0,   6.5,   "activate",    "morning pages / journaling"],
+  ["morning",   6.5,   6.75,  "sprouts",     "rinse sprouts + check ferments"],
+  ["morning",   6.75,  7.0,   "breakfast",   "eat breakfast"],
+  ["work1",     7.0,   7.25,  "matcha",      "make mid-morning drink"],
+  ["work1",     7.25,  10.0,  "work1do",     "focused work"],
+  ["freelunch", 10.0,  10.5,  "admin",       "admin block"],
+  ["freelunch", 10.5,  12.5,  "creative",    "creative work"],
+  ["freelunch", 12.5,  13.0,  "lunch",       "eat lunch + read fiction"],
+  ["work2",     13.0,  15.0,  "work2do",     ERRANDS ? "run errands" : "focused work"],
+  ["afternoon", 15.0,  16.0,  "workout",     GYM ? "go to the gym" : "workout / walk"],
+  ["afternoon", 16.0,  16.25, "sauna",       "sauna"],
+  ["afternoon", 16.25, 16.5,  "shower",      "shower"],
+  ["afternoon", 16.5,  16.75, "meditate2",   "meditate"],
+  ["afternoon", 16.75, 17.0,  "snack",       "afternoon snack + sun"],
+  ["dinner",    17.0,  17.5,  "chores",      "chores + meal prep"],
+  ["dinner",    17.5,  19.0,  "dinnermeal",  "dinner with family"],
+  ["freeeve",   19.0,  21.0,  "free2",       "free block"],
+  ["winddown",  21.0,  21.25, "kitchen",     "check kitchen projects"],
+  ["winddown",  21.25, 21.75, "skincare",    "skincare routine"],
+  ["winddown",  21.75, 22.0,  "getready",    "get ready for bed"],
+  ["winddown",  22.0,  22.5,  "sleep",       "lights out"],
+];
+
+// ═══════════════════════════════════════════════════════════════════
 // NO NEED TO EDIT BELOW THIS LINE
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+
+function visibleItems(block) {
+  return block.items.filter(item => !item.days || item.days.includes(DOW));
+}
 
 const state = {};
-
-function storageKey(id) { return 'dp2_' + id; }
+function storageKey(id) { return 'dp3_' + id; }
 
 function loadState() {
   const today = new Date().toDateString();
-  const savedDay = localStorage.getItem('dp2_day');
+  const savedDay = localStorage.getItem('dp3_day');
   if (savedDay !== today) {
-    const keys = Object.keys(localStorage).filter(k => k.startsWith('dp2_'));
-    keys.forEach(k => localStorage.removeItem(k));
-    localStorage.setItem('dp2_day', today);
+    Object.keys(localStorage).filter(k => k.startsWith('dp3_')).forEach(k => localStorage.removeItem(k));
+    localStorage.setItem('dp3_day', today);
   }
   SCHEDULE.forEach(block => {
-    block.items.forEach(item => {
+    visibleItems(block).forEach(item => {
       state[item.id] = localStorage.getItem(storageKey(item.id)) === '1';
-      if (item.subs) {
-        item.subs.forEach((_, i) => {
-          const sk = item.id + '_s' + i;
-          state[sk] = localStorage.getItem(storageKey(sk)) === '1';
-        });
-      }
+      if (item.subs) item.subs.forEach((_, i) => {
+        const sk = item.id + '_s' + i;
+        state[sk] = localStorage.getItem(storageKey(sk)) === '1';
+      });
     });
   });
 }
@@ -433,70 +411,57 @@ function saveState(id, val) {
 }
 
 function resetAll() {
-  if (!confirm('Reset today\'s checklist?')) return;
-  Object.keys(state).forEach(k => {
-    state[k] = false;
-    localStorage.removeItem(storageKey(k));
-  });
+  if (!confirm("Reset today's checklist?")) return;
+  Object.keys(state).forEach(k => { state[k] = false; localStorage.removeItem(storageKey(k)); });
   renderAll();
-}
-
-function totalItems() {
-  let t = 0;
-  SCHEDULE.forEach(b => b.items.forEach(i => {
-    t++;
-    if (i.subs) t += i.subs.length;
-  }));
-  return t;
-}
-
-function checkedCount() {
-  return Object.values(state).filter(Boolean).length;
 }
 
 function getBlockProgress(block) {
   let total = 0, done = 0;
-  block.items.forEach(item => {
+  visibleItems(block).forEach(item => {
     total++; if (state[item.id]) done++;
     if (item.subs) item.subs.forEach((_, i) => { total++; if (state[item.id + '_s' + i]) done++; });
   });
   return { total, done };
 }
 
+function totalItems() {
+  let t = 0;
+  SCHEDULE.forEach(b => { t += getBlockProgress(b).total; });
+  return t;
+}
+
+function checkedCount() { return Object.values(state).filter(Boolean).length; }
+
 function updateProgress() {
-  const pct = Math.round(checkedCount() / totalItems() * 100);
+  const total = totalItems();
+  const pct = total ? Math.round(checkedCount() / total * 100) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressLabel').textContent = pct + '% complete';
-
   SCHEDULE.forEach(block => {
     const { total, done } = getBlockProgress(block);
-    const el = document.getElementById('block_' + block.id);
     const progEl = document.getElementById('prog_' + block.id);
     if (progEl) progEl.textContent = done + '/' + total;
-    if (el) {
-      el.classList.toggle('complete', done === total && total > 0);
-    }
+    const el = document.getElementById('block_' + block.id);
+    if (el) el.classList.toggle('complete', done === total && total > 0);
   });
 }
 
 function toggleBlock(id) {
-  const el = document.getElementById('block_' + id);
-  el.classList.toggle('open');
+  document.getElementById('block_' + id).classList.toggle('open');
 }
 
 function toggleSubs(itemId, e) {
   if (e) e.stopPropagation();
-  const el = document.getElementById('subs_' + itemId);
+  const el  = document.getElementById('subs_' + itemId);
   const btn = document.getElementById('subtoggle_' + itemId);
   const open = el.classList.toggle('open');
-  btn.textContent = open ? '▴ hide' : '▾ show ingredients';
+  btn.textContent = open ? '▴ hide' : '▾ show';
 }
 
 function toggleItem(itemId) {
   saveState(itemId, !state[itemId]);
-  const row = document.getElementById('row_' + itemId);
-  const cb = document.getElementById('cb_' + itemId);
-  row.classList.toggle('checked', state[itemId]);
+  document.getElementById('row_' + itemId).classList.toggle('checked', state[itemId]);
   updateProgress();
 }
 
@@ -504,14 +469,22 @@ function toggleSub(itemId, i, e) {
   if (e) e.stopPropagation();
   const sk = itemId + '_s' + i;
   saveState(sk, !state[sk]);
-  const row = document.getElementById('sub_' + itemId + '_' + i);
-  row.classList.toggle('checked', state[sk]);
+  document.getElementById('sub_' + itemId + '_' + i).classList.toggle('checked', state[sk]);
   updateProgress();
 }
 
+function getNowH() { const n = new Date(); return n.getHours() + n.getMinutes() / 60; }
+
+function getCurrentTask() {
+  const h = getNowH();
+  return TASK_TIMELINE.find(([,start,end]) => h >= start && h < end) || null;
+}
+
 function getCurrentBlockId() {
-  const h = new Date().getHours() + new Date().getMinutes() / 60;
-  if (h < 7) return 'morning';
+  const task = getCurrentTask();
+  if (task) return task[0];
+  const h = getNowH();
+  if (h < 7)  return 'morning';
   if (h < 10) return 'work1';
   if (h < 13) return 'freelunch';
   if (h < 15) return 'work2';
@@ -521,27 +494,51 @@ function getCurrentBlockId() {
   return 'winddown';
 }
 
+function renderNowBanner() {
+  const wrap = document.getElementById('nowBannerWrap');
+  const task = getCurrentTask();
+  if (!task) { wrap.innerHTML = ''; return; }
+  const label = task[4];
+  wrap.innerHTML = `<div class="now-banner">
+    <div class="now-dot"></div>
+    <div class="now-text">now → ${label}</div>
+  </div>`;
+}
+
 function renderAll() {
   const container = document.getElementById('blocks');
   container.innerHTML = '';
-  const currentId = getCurrentBlockId();
+  const currentBlockId = getCurrentBlockId();
+  const currentTask    = getCurrentTask();
+  const currentItemId  = currentTask ? currentTask[3] : null;
+  const DAY_NAMES      = ['sun','mon','tue','wed','thu','fri','sat'];
 
   SCHEDULE.forEach(block => {
     const { total, done } = getBlockProgress(block);
-    const isOpen = block.id === currentId;
+    const isOpen     = block.id === currentBlockId;
     const isComplete = done === total && total > 0;
+    const isCurrent  = block.id === currentBlockId;
 
     const blockEl = document.createElement('div');
-    blockEl.className = 'block' + (isOpen ? ' open' : '') + (isComplete ? ' complete' : '') + (block.id === currentId ? ' active' : '');
+    blockEl.className = ['block', isOpen?'open':'', isComplete?'complete':'', isCurrent?'is-current':''].filter(Boolean).join(' ');
     blockEl.id = 'block_' + block.id;
 
-    let itemsHtml = block.items.map(item => {
+    const ambianceHtml = (block.ambiance||[]).length
+      ? `<div class="block-ambiance">${block.ambiance.map(a=>`<span class="amb-tag ${a.type}">${a.label}</span>`).join('')}</div>`
+      : '';
+
+    const itemsHtml = visibleItems(block).map(item => {
       const checked = state[item.id];
+      const isNow   = item.id === currentItemId;
+      const dayBadge = item.days
+        ? `<span class="day-badge">${item.days.map(d=>DAY_NAMES[d]).join(' · ')}</span>`
+        : '';
+
       let subsHtml = '';
       if (item.subs && item.subs.length) {
-        const subRows = item.subs.map((s, i) => {
-          const sc = state[item.id + '_s' + i];
-          return `<div class="subitem ${sc ? 'checked' : ''}" id="sub_${item.id}_${i}" onclick="toggleSub('${item.id}', ${i}, event)">
+        const subRows = item.subs.map((s,i) => {
+          const sc = state[item.id+'_s'+i];
+          return `<div class="subitem ${sc?'checked':''}" id="sub_${item.id}_${i}" onclick="toggleSub('${item.id}',${i},event)">
             <div class="sub-cb"><span class="sub-check">✓</span></div>
             <span class="subitem-label">${s}</span>
           </div>`;
@@ -549,37 +546,43 @@ function renderAll() {
         subsHtml = `<div class="subitems" id="subs_${item.id}">${subRows}</div>`;
       }
 
-      return `<div class="item ${checked ? 'checked' : ''}" id="row_${item.id}" onclick="toggleItem('${item.id}')">
+      return `<div class="item ${checked?'checked':''} ${isNow?'is-now':''}" id="row_${item.id}" onclick="toggleItem('${item.id}')">
         <div class="cb" id="cb_${item.id}"><span class="cb-check">✓</span></div>
         <div class="item-right">
-          <div class="item-label">${item.label}</div>
+          <div class="item-label">${item.label}${dayBadge}</div>
           ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
-          ${item.subs && item.subs.length ? `<button class="sub-toggle-btn" id="subtoggle_${item.id}" onclick="toggleSubs('${item.id}', event)">▾ show ingredients</button>` : ''}
+          ${item.subs&&item.subs.length ? `<button class="sub-toggle-btn" id="subtoggle_${item.id}" onclick="toggleSubs('${item.id}',event)">▾ show</button>` : ''}
         </div>
-      </div>
-      ${subsHtml}`;
+      </div>${subsHtml}`;
     }).join('');
 
     blockEl.innerHTML = `
       <div class="block-header" onclick="toggleBlock('${block.id}')">
-        <span class="block-time">${block.time}</span>
-        <span class="block-title">${block.title}</span>
-        <span class="block-prog" id="prog_${block.id}">${done}/${total}</span>
-        <span class="chevron">▶</span>
+        <div class="block-header-left"><span class="block-time">${block.time}</span></div>
+        <div class="block-header-center">
+          <span class="block-title">${block.title}</span>
+          ${ambianceHtml}
+        </div>
+        <div class="block-header-right">
+          <span class="block-prog" id="prog_${block.id}">${done}/${total}</span>
+          <span class="chevron">▶</span>
+        </div>
       </div>
       <div class="block-body">${itemsHtml}</div>`;
 
     container.appendChild(blockEl);
   });
 
+  renderNowBanner();
   updateProgress();
 }
 
 // Init
-const now = new Date();
-document.getElementById('dateStr').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+const _now = new Date();
+document.getElementById('dateStr').textContent = _now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 loadState();
 renderAll();
+setInterval(() => { renderNowBanner(); updateProgress(); }, 60000);
 </script>
 </body>
 </html>
